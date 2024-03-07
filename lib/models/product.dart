@@ -3,8 +3,8 @@ class Product {
   late String _name;
   late String _description;
   late double _price;
-  late bool _inCart;
-  late bool _inFavourite;
+  late bool _inCart; // for the product item cart icon
+  late bool _inFavourite; // for the product item favourite icon
   late int _quantity;
 
   Product({
@@ -79,5 +79,10 @@ class Product {
 
   set setQuantity(int val) {
     _quantity = val;
+  }
+
+  resetCart() {
+    _inCart = false;
+    _quantity = 0;
   }
 }

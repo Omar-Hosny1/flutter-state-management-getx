@@ -10,50 +10,30 @@ class CartController extends GetxController {
   }
 
   addToCart(Product product) {
-    product.setInCart = true;
-    final productIndex = _getProductWithIndexOf(product.id);
-    if (productIndex == -1) {
-      product.setQuantity = 1;
+    if (!_cartItems.contains(product)) {
       _cartItems.add(product);
-      updateTheCartListeners(product.id);
-      return;
+      product.setInCart = true;
+      update([Strings.cartItemGetBuilderId(product.id)]);
     }
-    _cartItems[productIndex].setQuantity =
-        _cartItems[productIndex].quantity + 1;
-    updateTheCartListeners(product.id);
+    product.setQuantity = product.quantity + 1;
+    update([Strings.cartGetBuilderId]);
   }
 
   removeFromCart(Product product) {
-    final productIndex = _getProductWithIndexOf(product.id);
-    if (_cartItems[productIndex].quantity == 1) {
-      product.setInCart = false;
-      _cartItems.removeWhere((element) => element.id == product.id);
-      updateTheCartListeners(product.id);
+    if (product.quantity == 1) {
+      removeFromCartPermuntally(product);
       return;
     }
-    _cartItems[productIndex].setQuantity =
-        _cartItems[productIndex].quantity - 1;
-    updateTheCartListeners(product.id);
-  }
-
-  int _getProductWithIndexOf(String id) {
-    for (var i = 0; i < _cartItems.length; i++) {
-      if (_cartItems[i].id == id) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  removeFromCartPermuntly(Product product) {
-    final productIndex = _getProductWithIndexOf(product.id);
-    _cartItems[productIndex].setInCart = false;
-    _cartItems.removeWhere((element) => element.id == product.id);
-    updateTheCartListeners(product.id);
-  }
-
-  updateTheCartListeners(String id) {
+    product.setQuantity = product.quantity - 1;
     update([Strings.cartGetBuilderId]);
-    update([Strings.cartItemGetBuilderId(id)]);
+  }
+
+  removeFromCartPermuntally(Product product) {
+    product.resetCart();
+    _cartItems.removeWhere((p) => p.id == product.id);
+    update([
+      Strings.cartGetBuilderId,
+      Strings.cartItemGetBuilderId(product.id),
+    ]);
   }
 }

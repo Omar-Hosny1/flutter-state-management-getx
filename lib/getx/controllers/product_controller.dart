@@ -11,9 +11,9 @@ class ProductController extends GetxController {
     products = List.generate(
       15,
       (index) => Product(
-        id: index.toString(),
-        description: 'Description of $index',
-        name: 'Name of $index',
+        id: (index + 1).toString(),
+        description: 'Description of ${index + 1}',
+        name: 'Name of ${index + 1}',
         price: (index + 1) * 10,
       ),
     );

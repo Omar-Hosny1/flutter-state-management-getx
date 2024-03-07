@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_management/getx/constants/Strings.dart';
 import 'package:flutter_state_management/getx/controllers/cart_controller.dart';
+import 'package:flutter_state_management/getx/controllers/favourite_controller.dart';
 import 'package:flutter_state_management/models/product.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 
 class ProductDetails extends StatelessWidget {
   ProductDetails({super.key});
@@ -47,30 +47,45 @@ class ProductDetails extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GetBuilder<CartController>(
                   id: Strings.cartItemGetBuilderId(product.id),
-                  builder: (controller) => ElevatedButton(
-                    onPressed: () {
-                      if (product.inCart) {
-                        controller.removeFromCart(product);
-                        return;
-                      }
-                      controller.addToCart(product);
-                    },
-                    child: Text(
-                      product.inCart ? 'Remove From Cart' : 'Add to Cart',
+                  builder: (controller) => SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (product.inCart) {
+                          controller.removeFromCart(product);
+                          return;
+                        }
+                        controller.addToCart(product);
+                      },
+                      child: Text(
+                        product.inCart ? 'Remove From Cart' : 'Add to Cart',
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle add to favorites action
-                  },
-                  child: Text('Add to Favorites'),
+                SizedBox(height: 10),
+                GetBuilder<FavouriteController>(
+                  id: Strings.favItemGetBuilderId(product.id),
+                  builder: (controller) => SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (product.inFavourite) {
+                          controller.removeFromFavourites(product);
+                          return;
+                        }
+                        controller.addToFavourites(product);
+                      },
+                      child: product.inFavourite
+                          ? Text('Remove From Favorites')
+                          : Text('Add to Favorites'),
+                    ),
+                  ),
                 ),
               ],
             ),
